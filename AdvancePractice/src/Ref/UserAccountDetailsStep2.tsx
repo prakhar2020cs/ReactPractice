@@ -6,27 +6,24 @@ type Props = {
 }
 
 const UserAccountDetailsStep2: React.FC<Props> = ({ data, onChange }) => {
-const [error, setError] = useState({
-
-})
+  const validEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
-useEffect(()=>{ console.log("handleError", data.confirm, data.password, error), handleError()},[data])
+const errors = {
+  username:
+    data.username && data.username.length < 5
+      ? 'username should be at least 5 characters'
+      : '',
 
-console.log("error",error) 
-const handleError =()=>{   
-    const validEmailPattern =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    // console.log("handleError", data.confirm, data.password)
-    if(data.confirm && data.confirm !== data.password) setError((prevs)=>({...prevs, confirm:'password and confirm should be same'}))
-    else setError((prevs)=>({...prevs, confirm:''}))
+  email:
+    data.email && !validEmailPattern.test(data.email)
+      ? 'Enter a Valid Email'
+      : '',
 
-     if(data.username && data.username.length <5) setError((prevs)=>({...prevs, username:'username should be at least 5 characters'}))
-    else setError((prevs)=>({...prevs, username:''}))
-
-      if(data.username && !validEmailPattern.test(data.email)) setError((prevs)=>({...prevs, email:'Enter a Valid Email'}))
-    else setError((prevs)=>({...prevs, email:''}))
-    
+  confirm:
+    data.confirm && data.confirm !== data.password
+      ? 'password and confirm should be same'
+      : ''
 }
 
   return (
@@ -35,25 +32,24 @@ const handleError =()=>{
       <div style={{ marginBottom: 8 }}>
         <label style={{ display: 'block', fontSize: 12 }}>Username</label>
         <input name="username" value={data.username} onChange={onChange} />
-                {error.username&&<p style={{color:'red'}}>{error.username}</p>}
+{errors.username && (<p style={{ color: 'red' }}>{errors.username}</p>)}
 
       </div>
       <div style={{ marginBottom: 8 }}>
         <label style={{ display: 'block', fontSize: 12 }}>Email</label>
         <input name="email" value={data.email} onChange={onChange} type="email" />
-                {error.email&&<p style={{color:'red'}}>{error.email}</p>}
+{errors.email && (<p style={{ color: 'red' }}>{errors.email}</p>)}
 
       </div>
       <div style={{ marginBottom: 8 }}>
         <label style={{ display: 'block', fontSize: 12 }}>Password</label>
         <input name="password" value={data.password} onChange={onChange} type="password" />
-                {error.password&&<p style={{color:'red'}}>{error.password}</p>}
-
+{errors.password && (<p style={{ color: 'red' }}>{errors.password}</p>)}
       </div>
       <div style={{ marginBottom: 8 }}>
         <label style={{ display: 'block', fontSize: 12 }}>Confirm Password</label>
         <input  name="confirm" value={data.confirm} onChange={(e)=>{onChange(e);}} type="password" />
-        {error.confirm&&<p style={{color:'red'}}>{error.confirm}</p>}
+{errors.confirm && (<p style={{ color: 'red' }}>{errors.confirm}</p>)}
       </div>
     </div>
   )
